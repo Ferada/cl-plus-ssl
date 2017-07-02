@@ -234,6 +234,16 @@ session-resume requests) would normally be copied into the local cache before pr
   (e :unsigned-long)
   (buf :pointer))
 
+(cffi:defcfun ("SSL_get_cipher_list" %ssl-get-cipher-list)
+    :string
+  (ssl ssl-pointer)
+  (priority :int))
+(defun ssl-get-cipher-list (ssl)
+  (loop
+    for i from 0
+    for cipher = (%ssl-get-cipher-list ssl i)
+    while cipher
+    collect cipher))
 (cffi:defcfun ("SSL_set_cipher_list" ssl-set-cipher-list)
     :int
   (ssl ssl-pointer)
